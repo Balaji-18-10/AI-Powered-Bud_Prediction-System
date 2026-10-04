@@ -1,0 +1,58 @@
+# Node & Frontend dependencies
+node_modules/
+frontend/node_modules/
+.pnp
+.pnp.js
+
+# Testing and build outputs
+coverage/
+dist/
+frontend/dist/
+build/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Python & Backend artifacts
+__pycache__/
+backend/**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+.pytest_cache/
+
+# SQLite journals & temporary locks (preserve pre-seeded bug_predictor.db)
+*.db-journal
+*.db-wal
+*.db-shm
+
+# IDE & OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+.env.*.local

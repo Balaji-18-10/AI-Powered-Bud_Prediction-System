@@ -1,0 +1,171 @@
+{
+  "dataset": {
+    "name": "NASA MDP JM1",
+    "source": "NASA Metrics Data Program / PROMISE Repository (OpenML ID: 1053)",
+    "domain": "Ground system real-time predictive software (C/C++)",
+    "raw_records": 10885,
+    "duplicate_records_removed": 1973,
+    "unique_records_used": 8912,
+    "train_samples": 7129,
+    "test_samples": 1783,
+    "defective_instances": 2007,
+    "clean_instances": 6905,
+    "defect_ratio_percent": 22.52,
+    "features_count": 21,
+    "feature_names": [
+      "loc",
+      "v(g)",
+      "ev(g)",
+      "iv(g)",
+      "n",
+      "v",
+      "l",
+      "d",
+      "i",
+      "e",
+      "b",
+      "t",
+      "lOCode",
+      "lOComment",
+      "lOBlank",
+      "locCodeAndComment",
+      "uniq_Op",
+      "uniq_Opnd",
+      "total_Op",
+      "total_Opnd",
+      "branchCount"
+    ],
+    "feature_medians": {
+      "loc": 27.0,
+      "v(g)": 4.0,
+      "ev(g)": 1.0,
+      "iv(g)": 2.0,
+      "n": 64.0,
+      "v": 298.06,
+      "l": 0.07,
+      "d": 11.27,
+      "i": 25.285,
+      "e": 3422.705,
+      "b": 0.1,
+      "t": 190.14999999999998,
+      "lOCode": 16.0,
+      "lOComment": 0.0,
+      "lOBlank": 3.0,
+      "locCodeAndComment": 0.0,
+      "uniq_Op": 12.0,
+      "uniq_Opnd": 13.0,
+      "total_Op": 38.0,
+      "total_Opnd": 25.0,
+      "branchCount": 7.0
+    }
+  },
+  "best_model": {
+    "name": "Random Forest",
+    "algorithm": "RandomForestClassifier",
+    "accuracy": 0.7269,
+    "precision": 0.4127,
+    "recall": 0.5,
+    "f1_score": 0.4522,
+    "confusion_matrix": [
+      [
+        1095,
+        286
+      ],
+      [
+        201,
+        201
+      ]
+    ]
+  },
+  "models_comparison": [
+    {
+      "model_name": "Logistic Regression",
+      "accuracy": 0.7134,
+      "precision": 0.3908,
+      "recall": 0.4851,
+      "f1_score": 0.4329,
+      "confusion_matrix": [
+        [
+          1077,
+          304
+        ],
+        [
+          207,
+          195
+        ]
+      ],
+      "true_negatives": 1077,
+      "false_positives": 304,
+      "false_negatives": 207,
+      "true_positives": 195,
+      "is_best": false
+    },
+    {
+      "model_name": "Decision Tree",
+      "accuracy": 0.6635,
+      "precision": 0.3582,
+      "recall": 0.6219,
+      "f1_score": 0.4545,
+      "confusion_matrix": [
+        [
+          933,
+          448
+        ],
+        [
+          152,
+          250
+        ]
+      ],
+      "true_negatives": 933,
+      "false_positives": 448,
+      "false_negatives": 152,
+      "true_positives": 250,
+      "is_best": false
+    },
+    {
+      "model_name": "Random Forest",
+      "accuracy": 0.7269,
+      "precision": 0.4127,
+      "recall": 0.5,
+      "f1_score": 0.4522,
+      "confusion_matrix": [
+        [
+          1095,
+          286
+        ],
+        [
+          201,
+          201
+        ]
+      ],
+      "true_negatives": 1095,
+      "false_positives": 286,
+      "false_negatives": 201,
+      "true_positives": 201,
+      "is_best": true
+    }
+  ],
+  "feature_importances": {
+    "loc": 0.1405,
+    "v(g)": 0.0524,
+    "ev(g)": 0.0307,
+    "iv(g)": 0.0506,
+    "n": 0.0448,
+    "v": 0.0596,
+    "l": 0.0231,
+    "d": 0.0465,
+    "i": 0.0556,
+    "e": 0.042,
+    "b": 0.0346,
+    "t": 0.0465,
+    "lOCode": 0.0524,
+    "lOComment": 0.0261,
+    "lOBlank": 0.068,
+    "locCodeAndComment": 0.0171,
+    "uniq_Op": 0.033,
+    "uniq_Opnd": 0.0462,
+    "total_Op": 0.0456,
+    "total_Opnd": 0.0391,
+    "branchCount": 0.0456
+  }
+}
