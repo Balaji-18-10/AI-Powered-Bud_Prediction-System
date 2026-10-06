@@ -91,6 +91,11 @@ export const downloadServerPdfReport = (): string => {
   return `${API_BASE_URL}/api/reports/pdf`;
 };
 
+export const downloadCodeAnalysisPdfReport = (id: number): string => {
+  return `${API_BASE_URL}/api/reports/code-analysis/${id}/pdf`;
+};
+
+
 // Source Code Analysis APIs
 export const uploadSourceCode = async (file: File, commits: number = 15): Promise<CodeAnalysisResponse> => {
   const formData = new FormData();

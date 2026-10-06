@@ -6,6 +6,7 @@ from sqlalchemy import func
 from app.core.database import get_db
 from app.models.module import Module
 from app.models.prediction import PredictionRecord
+from app.models.code_analysis import CodeAnalysisRecord
 from app.schemas.prediction import DashboardStats, PredictionResponse
 from app.services.ml_engine import bug_predictor
 
@@ -79,6 +80,15 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
             created_at=r.created_at
         ))
 
+    # Source code analysis metrics
+    code_records = db.query(CodeAnalysisRecord).all()
+    total_files_analyzed = len(code_records)
+    total_syntax_issues = sum(getattr(r, "syntax_errors_count", 0) or 0 for r in code_records)
+    total_code_warnings = sum(getattr(r, "warnings_count", 0) or 0 for r in code_records)
+    high_risk_files = sum(1 for r in code_records if r.risk_level == "High")
+    medium_risk_files = sum(1 for r in code_records if r.risk_level == "Medium")
+    low_risk_files = sum(1 for r in code_records if r.risk_level == "Low")
+
     # ML Metadata from trained engine
     ml_meta = bug_predictor.get_model_metadata()
 
@@ -97,6 +107,12 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
         },
         top_riskiest_modules=top_riskiest,
         recent_predictions=recent_preds,
+        total_files_analyzed=total_files_analyzed,
+        total_syntax_issues=total_syntax_issues,
+        total_code_warnings=total_code_warnings,
+        high_risk_files=high_risk_files,
+        medium_risk_files=medium_risk_files,
+        low_risk_files=low_risk_files,
         ml_dataset_info=ml_meta.get("dataset"),
         ml_best_model=ml_meta.get("best_model"),
         ml_models_comparison=ml_meta.get("models_comparison")

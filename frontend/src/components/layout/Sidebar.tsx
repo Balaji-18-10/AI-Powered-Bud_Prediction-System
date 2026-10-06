@@ -11,10 +11,12 @@ import {
   Gauge,
   FileCode,
   Sparkles,
+  Code2,
 } from 'lucide-react';
 
 export type NavigationPage =
   | 'dashboard'
+  | 'code-analysis'
   | 'predict'
   | 'result'
   | 'modules'
@@ -49,10 +51,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       badge: null,
     },
     {
+      id: 'code-analysis' as NavigationPage,
+      label: 'Source Code Analysis',
+      icon: Code2,
+      badge: 'New',
+    },
+    {
       id: 'predict' as NavigationPage,
       label: 'Bug Prediction',
       icon: Bug,
-      badge: 'Upload',
+      badge: 'ML',
     },
     {
       id: 'analysis-history' as NavigationPage,

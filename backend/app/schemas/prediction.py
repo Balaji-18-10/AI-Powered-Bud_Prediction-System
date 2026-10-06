@@ -54,6 +54,13 @@ class DashboardStats(BaseModel):
     risk_distribution: Dict[str, int]
     top_riskiest_modules: List[Dict[str, Any]]
     recent_predictions: List[PredictionResponse]
+    # Source Code Analysis metrics
+    total_files_analyzed: int = 0
+    total_syntax_issues: int = 0
+    total_code_warnings: int = 0
+    high_risk_files: int = 0
+    medium_risk_files: int = 0
+    low_risk_files: int = 0
     ml_dataset_info: Optional[Dict[str, Any]] = None
     ml_best_model: Optional[Dict[str, Any]] = None
     ml_models_comparison: Optional[List[Dict[str, Any]]] = None

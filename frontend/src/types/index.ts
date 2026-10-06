@@ -95,6 +95,13 @@ export interface DashboardStats {
     updated_at: string;
   }[];
   recent_predictions: PredictionResponse[];
+  total_files_analyzed?: number;
+  total_syntax_issues?: number;
+  total_code_warnings?: number;
+  code_high_risk_files?: number;
+  code_medium_risk_files?: number;
+  code_low_risk_files?: number;
+  recent_code_analyses?: CodeAnalysisListItem[];
   ml_dataset_info?: MLDatasetInfo;
   ml_best_model?: MLBestModel;
   ml_models_comparison?: MLModelComparisonItem[];
@@ -168,6 +175,33 @@ export interface ReportSummary {
   }[];
 }
 
+export interface SyntaxErrorItem {
+  error_type: string;
+  line_number: number;
+  column_number?: number | null;
+  severity: 'Critical' | 'High' | 'Medium' | 'Low';
+  message: string;
+  suggested_fix: string;
+}
+
+export interface CodeQualityWarning {
+  rule_id: string;
+  title: string;
+  line_number: number;
+  severity: 'Critical' | 'High' | 'Medium' | 'Low' | 'Info';
+  message: string;
+  suggestion: string;
+}
+
+export interface RiskFactorItem {
+  metric: string;
+  value: number;
+  contribution_percent: number;
+  risk_level: string;
+  description: string;
+  source: string;
+}
+
 // Source Code Analysis Types
 export interface CodeMetrics {
   loc: number;
@@ -176,9 +210,11 @@ export interface CodeMetrics {
   comment_lines: number;
   functions_count: number;
   classes_count: number;
+  imports_count?: number;
   comments_count: number;
   cyclomatic_complexity: number;
   if_statements: number;
+  conditions_count?: number;
   loops_count: number;
   switch_statements: number;
   comment_ratio: number;
@@ -198,9 +234,15 @@ export interface CodeAnalysisResponse {
   file_size: number;
   source_code: string;
   metrics: CodeMetrics;
+  syntax_errors_count: number;
+  warnings_count: number;
+  syntax_errors: SyntaxErrorItem[];
+  code_warnings: CodeQualityWarning[];
   risk_score: number;
   risk_level: 'Low' | 'Medium' | 'High';
   confidence: number;
+  risk_factors?: RiskFactorItem[];
+  explanation?: string;
   model_name?: string;
   predicted_class?: 'Defective' | 'Non-Defective' | string;
   prediction_probability?: number;
@@ -217,6 +259,8 @@ export interface CodeAnalysisListItem {
   functions_count: number;
   classes_count: number;
   cyclomatic_complexity: number;
+  syntax_errors_count?: number;
+  warnings_count?: number;
   risk_score: number;
   risk_level: 'Low' | 'Medium' | 'High';
   created_at: string;

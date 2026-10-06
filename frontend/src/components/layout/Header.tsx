@@ -32,9 +32,13 @@ export const Header: React.FC<HeaderProps> = ({
       title: 'Dashboard Overview',
       subtitle: 'Real-time codebase bug risk analytics and health indicators',
     },
+    'code-analysis': {
+      title: 'Source Code Analysis',
+      subtitle: 'Static AST syntax verification, programming error detection & bug risk prediction',
+    },
     predict: {
-      title: 'Source Code Analysis & Bug Prediction',
-      subtitle: 'Analyze .java, .py, .cpp, and .c code or use manual metric sliders',
+      title: 'Bug Prediction & Simulation',
+      subtitle: 'NASA MDP JM1 machine learning model defect probability assessment',
     },
     'analysis-history': {
       title: 'Source Code Analysis Logs',

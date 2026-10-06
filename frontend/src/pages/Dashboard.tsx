@@ -9,7 +9,6 @@ import {
   ArrowRight,
   Activity,
   RefreshCw,
-  FileCode,
   FileDown,
   Layers,
   BarChart3,
@@ -18,6 +17,7 @@ import {
   Database,
   Award,
   CheckCircle2,
+  Code2,
 } from 'lucide-react';
 import {
   PieChart,
@@ -186,11 +186,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate, onSelectPredic
           {/* Action CTAs */}
           <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
             <button
-              onClick={() => onNavigate('predict')}
+              onClick={() => onNavigate('code-analysis')}
               className="flex items-center justify-center gap-2 rounded-2xl bg-white text-indigo-700 hover:bg-indigo-50 active:scale-95 px-5 py-3 text-xs font-bold shadow-lg shadow-black/10 transition-all cursor-pointer"
             >
-              <FileCode className="h-4 w-4 text-indigo-600" />
-              <span>Analyze Source Code</span>
+              <Code2 className="h-4 w-4 text-indigo-600" />
+              <span>Source Code Analysis</span>
               <ArrowRight className="h-3.5 w-3.5 ml-0.5" />
             </button>
 
@@ -252,6 +252,61 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate, onSelectPredic
               : 'emerald'
           }
         />
+      </div>
+
+      {/* 2B. SOURCE CODE STATIC ANALYSIS KPI HIGHLIGHT */}
+      <div className="rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-gradient-to-r from-slate-50 via-indigo-50/20 to-purple-50/20 dark:from-slate-900 dark:via-indigo-950/20 dark:to-purple-950/10 p-5 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-indigo-500/20">
+              <Code2 className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                  Source Code Static Analysis & Syntax Verification
+                </h4>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/60 dark:text-indigo-300">
+                  Java • Python • C • C++
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Multi-layer static parsing, AST delimiter analysis, and 14 code quality rule scans across raw files.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 text-xs font-medium">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700">
+              <span className="text-slate-500">Files Analyzed:</span>
+              <span className="font-bold text-slate-900 dark:text-white">
+                {stats.total_files_analyzed ?? 0}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700">
+              <span className="text-slate-500">Syntax Issues:</span>
+              <span className={`font-bold ${(stats.total_syntax_issues ?? 0) > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                {stats.total_syntax_issues ?? 0}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700">
+              <span className="text-slate-500">Quality Warnings:</span>
+              <span className="font-bold text-amber-600 dark:text-amber-400">
+                {stats.total_code_warnings ?? 0}
+              </span>
+            </div>
+
+            <button
+              onClick={() => onNavigate('code-analysis')}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer shadow-xs"
+            >
+              <span>Scan File</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* 3. THREE INTERACTIVE CHARTS */}

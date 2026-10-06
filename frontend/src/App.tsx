@@ -9,6 +9,7 @@ import { PredictionResult } from './pages/PredictionResult';
 import { ModuleManagement } from './pages/ModuleManagement';
 import { PredictionHistory } from './pages/PredictionHistory';
 import { AnalysisHistory } from './pages/AnalysisHistory';
+import { SourceCodeAnalysis } from './pages/SourceCodeAnalysis';
 import { Reports } from './pages/Reports';
 import type { PredictionResponse } from './types';
 
@@ -42,6 +43,10 @@ export const AppContent: React.FC = () => {
           onNavigate={setCurrentPage}
           onSelectPrediction={handleSelectPrediction}
         />
+      )}
+
+      {currentPage === 'code-analysis' && (
+        <SourceCodeAnalysis onNavigate={setCurrentPage} />
       )}
 
       {currentPage === 'predict' && (

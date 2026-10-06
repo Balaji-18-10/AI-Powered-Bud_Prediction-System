@@ -161,61 +161,140 @@ All models were benchmarked on the identical unseen test split (**1,783 software
 
 ---
 
-## 💻 Source Code Static Analysis Engine
+## 💻 Source Code Static Analysis & Syntax Verification Engine
 
-The system supports automated AST inspection for 4 major software engineering languages:
+The system features a dual-layer static analysis engine supporting **Java (.java)**, **Python (.py)**, **C++ (.cpp)**, and **C (.c)** files with **zero code execution**:
 
-| Language | Extension | AST Parser / Analysis Mechanics |
-| :--- | :---: | :--- |
-| **Python** | `.py` | Native Python `ast` module parsing AST nodes: `FunctionDef`, `AsyncFunctionDef`, `ClassDef`, `If`, `For`, `While`, `Try`, boolean operators (`And`, `Or`), and list/dict comprehensions. |
-| **Java** | `.java` | Tokenizer filtering string and char literals; regex-based AST extraction for classes, interfaces, constructors, methods, control loops, switches, catches, ternary ops, and comments. |
-| **C++** | `.cpp` | Lexical parser extracting classes, structs, member functions, pointer/reference signatures, nested conditionals, loops, switch statements, and block comments. |
-| **C** | `.c` | Static analyzer extracting struct declarations, global/local functions, decision branches, bitwise operations, and preprocessor comments. |
+```
+Uploaded Source File (.java, .py, .cpp, .c)  [Max: 5MB, Sandboxed Reading]
+   │
+   ├──▶ Layer 1: Syntax Error Detection
+   │      • Python: Native AST parsing (`ast.parse`) with exact line, column, and standard suggestion.
+   │      • Java: Delimiter balancing, semicolon validation, and malformed header checks.
+   │      • C / C++: Bracket/parenthesis balance, semicolon checks, and preprocessor syntax verification.
+   │      • Zero False Claims: Returns error findings ONLY upon actual AST/grammar failure.
+   │
+   ├──▶ Layer 2: Common Programming Error & Security Rules (14 Static Checks)
+   │      • Empty Catch Blocks (Silent exception swallowing)
+   │      • Infinite Loop Risks (`while(true)`, `for(;;)`)
+   │      • Unused Imports & Variables
+   │      • Hardcoded Secrets & API Tokens (`sk_live_...`, passwords, private keys)
+   │      • Array & Vector Index Out-of-Bounds Risks
+   │      • Suspicious Assignment in Conditions (`if (x = 5)`)
+   │      • Unreachable Code following return/break statements
+   │      • Null / None Pointer Dereferences
+   │      • Dangerous APIs (`gets`, `strcpy`, `sprintf`, `eval`, `exec`)
+   │      • Method & Class Length Refactoring Warnings
+   │
+   ├──▶ Layer 3: Software Structural Metric Extraction
+   │      • Total LOC, Actual Code Lines, Comment Lines, Blank Lines
+   │      • Functions / Methods count & average method length
+   │      • Classes & Structures count
+   │      • Imports / Includes count
+   │      • Branch Conditionals count
+   │      • Loops (for, while, do-while) count
+   │      • Switch Statements count
+   │      • McCabe Cyclomatic Complexity $v(G)$
+   │      • Documentation / Comment Ratio (%)
+   │
+   └──▶ Layer 4: Machine Learning Defect Scoring (NASA MDP JM1)
+          • Transparent Provenance: Automatically tags metrics as "Extracted Automatically"
+          • Zero Git Fabrication: Marks commit churn as "Not Available (Static File Upload)"
+          • Calibrated Defect Probability ($0-100\%$) and Risk Tier (Low / Medium / High)
+```
+
+### Static Analysis Rule Taxonomy
+
+| Rule ID | Severity | Category | Description |
+| :--- | :---: | :--- | :--- |
+| `JAVA-CATCH-001` | Critical | Exception Handling | Empty catch block swallowing exceptions without logging or handling. |
+| `PY-CATCH-001` | Critical | Exception Handling | Empty `except` block with bare `pass`. |
+| `LOOP-INF-001` | High | Control Flow | Infinite loop construct (`while(true)`, `while(1)`) detected. |
+| `CRED-SEC-001` | Critical | Security | Hardcoded credential, private key, or API secret found in source code. |
+| `COND-ASSIGN-001`| High | Syntax/Logic | Accidental assignment operator inside conditional expression (`if (x = y)`). |
+| `ARRAY-BOUND-001`| High | Memory Safety | Array or vector indexed with unverified constant offset. |
+| `DEAD-CODE-001` | Medium | Maintainability | Unreachable dead code detected directly after return, throw, or break. |
+| `NULL-DEREF-001` | High | Memory Safety | Pointer or reference dereferenced without prior null / None verification. |
+| `UNUSED-VAR-001` | Low | Clean Code | Local variable initialized but never referenced in subsequent scope. |
+| `UNUSED-IMP-001` | Info | Clean Code | Package or library imported but not utilized in compilation unit. |
+| `DANGEROUS-API` | Critical | Security | Use of deprecated/unsafe functions (`gets`, `strcpy`, `eval`, `system`). |
+| `LONG-METHOD` | Medium | Refactoring | Subroutine exceeds recommended 50 lines of code threshold. |
+| `LONG-CLASS` | Medium | Architecture | Class or compilation unit exceeds recommended 300 lines threshold. |
+| `LOW-DOC-001` | Low | Documentation | Documentation comment ratio is under 10% of total lines of code. |
 
 ---
 
 ## 🖥️ UI/UX & Interactive Modules
 
-1. **Enterprise Dashboard**:
-   - SaaS welcome banner with quick actions.
+1. **Source Code Analysis Page (`/code-analysis`)**:
+   - Drag-and-drop file upload zone supporting `.java`, `.py`, `.c`, `.cpp` (5MB limit).
+   - Real-time language and file size auto-detection.
+   - 4 Instant Sample Presets for Java, Python, C++, and C.
+   - In-browser code editor and code-pasting mode.
+   - Animated multi-stage upload progress indicator.
+   - **Section A**: File Information banner (Name, Language, Size, Timestamp, Verdict).
+   - **Section B**: 10 Extracted Code Metric Cards (LOC, Complexity, Functions, Classes, Imports, Conditions, Loops, Switches, Documentation Ratio, Findings).
+   - **Section C**: Syntax Analysis Table (Location, Type, Severity, Message, Suggested Fix) + Clean Pass Banner.
+   - **Section D**: Static Analysis Warnings Table with dynamic severity filter tabs (*All, Critical, High, Medium, Low, Info*).
+   - **Section E**: Bug Defect Probability circular gauge + Transparent contributing factors table.
+   - **Section F**: Actionable refactoring recommendations.
+   - **Section G**: Syntax-highlighted code preview with line numbers and copy-to-clipboard.
+   - Direct "Export PDF Report" and "Analyze Another File" actions.
+
+2. **Enterprise Dashboard**:
+   - SaaS welcome banner with quick-action links.
    - 5 Animated Metric Cards: Total Modules, High Risk Hotspots, Medium Risk, Low Risk, and Composite Defect Index.
+   - **Source Code Static Analysis KPI Highlight**: Files analyzed, syntax issues detected, and code warnings found.
    - **Machine Learning Defect Intelligence Section**: Live NASA MDP JM1 dataset stats card, defect class imbalance progress bar, champion model KPIs, and interactive 3-model empirical evaluation table.
    - 3 Recharts Visualizations: Risk Distribution Donut Chart, Complexity Analysis Bar Chart, and LOC Composition Chart.
    - Recent evaluations audit stream.
-2. **Bug Prediction & Code Upload**:
-   - Drag-and-drop file upload zone supporting `.java`, `.py`, `.cpp`, `.c`.
-   - 4 Instant Sample Presets (`OrderProcessor.java`, `auth_service.py`, `data_buffer.cpp`, `packet_parser.c`).
-   - Animated multi-stage upload progress indicator.
-   - Result card with **Circular Progress Ring**, ML defect classification badge, model name, and probability.
-   - 8 Glassmorphism metric cards and syntax-highlighted code preview with copy-to-clipboard.
-   - Alternative manual sliders mode with real-time status indicators.
-3. **Prediction Result & Explainable AI**:
+
+3. **Source Code Analysis Logs (`/analysis-history`)**:
+   - Filterable table of past uploaded code analysis runs.
+   - Interactive modal inspection with full metrics, code viewer, and PDF report download.
+   - Complexity distribution and risk score trend charts.
+
+4. **Bug Prediction & Simulation (`/predict`)**:
+   - Interactive manual metric sliders (LOC, Complexity, Commits) for simulating defect risks.
+   - Direct NASA MDP JM1 ML inference engine integration.
+
+5. **Prediction Result & Explainable AI (`/result`)**:
    - Detailed breakdown of each metric's percentage impact and explanatory narrative.
-   - Filterable refactoring recommendations by category.
-   - Instant client-side PDF export.
-4. **Module Registry (CRUD)**:
+   - Prioritized refactoring recommendations by category.
+
+6. **Module Registry (CRUD) (`/modules`)**:
    - Searchable and sortable table with Add, Edit, Delete, and inline "Predict Risk Now" actions.
-5. **Prediction History & Code Logs**:
-   - Searchable audit log filterable by risk tier.
-6. **Executive Reports & PDF Export**:
-   - Summary cards, high-risk remediation list, and server-side PDF generator.
+
+7. **Executive Reports & PDF Export (`/reports`)**:
+   - High-level executive summaries and downloadable PDF defect reports.
 
 ---
 
 ## 🔌 REST API Endpoints
 
+### Source Code Analysis APIs
+
+| HTTP Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/code-analysis/upload` | Upload `.java`, `.py`, `.c`, `.cpp` file for static syntax, quality rules & ML scoring |
+| `POST` | `/api/code-analysis/analyze` | Analyze raw code payload string |
+| `GET` | `/api/code-analysis/history` | List previous static code analysis records (supports search & risk filter) |
+| `GET` | `/api/code-analysis/{id}` | Retrieve comprehensive analysis record (metrics, syntax errors, warnings, source) |
+| `DELETE` | `/api/code-analysis/{id}` | Delete a stored analysis record |
+| `GET` | `/api/code-analysis/stats/visualizations` | Aggregate statistics for complexity distributions, risk trends, and LOC |
+| `GET` | `/api/reports/code-analysis/{id}/pdf` | Download official standalone PDF audit report for an analyzed file |
+
+*(Note: `/api/analysis/*` endpoints are preserved as active aliases for full backwards compatibility).*
+
+### Core Prediction, Module, and Dashboard APIs
+
 | HTTP Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/api/health` | Healthcheck returning service name, status, and version |
-| `GET` | `/api/stats/dashboard` | Dashboard KPIs, top risky modules, and NASA MDP ML comparison data |
+| `GET` | `/api/stats/dashboard` | Dashboard KPIs, top risky modules, static analysis counters, and ML specs |
 | `POST` | `/api/predictions/predict` | Run ML prediction on manual metrics (LOC, Complexity, Commits) |
 | `GET` | `/api/predictions/ml-info` | Return NASA MDP JM1 dataset specifications and 3-model benchmark metrics |
 | `GET` | `/api/predictions/history` | Retrieve historical predictions with search and risk filters |
-| `POST` | `/api/analysis/upload` | Upload `.java`, `.py`, `.cpp`, `.c` file for AST analysis and ML prediction |
-| `POST` | `/api/analysis/raw` | Analyze raw pasted code snippet |
-| `GET` | `/api/analysis/history` | List previous static code analysis records |
-| `GET` | `/api/analysis/{id}` | Retrieve detailed AST metrics, recommendations, and source code preview |
-| `GET` | `/api/analysis/stats/visualizations` | Aggregate statistics for complexity distribution and LOC comparisons |
 | `GET` | `/api/modules` | List all monitored software modules |
 | `POST` | `/api/modules` | Register a new software module |
 | `GET` | `/api/modules/{id}` | Retrieve single module details |
